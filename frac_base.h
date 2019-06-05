@@ -23,32 +23,35 @@ namespace fraction{
             m_auto_reduce();     
         }
         frac_base(double ratio){
-            double r = ratio;
-            std::vector<Type> seq;
-            seq.push_back(static_cast<Type>(ratio));
-            ratio -= static_cast<double>(seq.back());
-            unsigned int count = 0;
-            while(!float_equal_zero(ratio)){
-                if(++count > 10000) break;
-                //cout << ratio << endl;
-                ratio = 1.0 / ratio;
-                seq.push_back(static_cast<Type>(ratio));
-                ratio -= static_cast<double>(seq.back());
+            std::vector<Type> sequence;
+            sequence.push_back(static_cast<Type>(ratio));
+            ratio = 1.0 / (ratio - sequence.back());
+            for(double p0 = 1,q0 = 0,
+                       p1 = sequence.back(),q1 = 1,
+                       p2,q2,
+                       err    = ratio - p1;
+                !float_equal_zero(err);){
+                cout << ratio << ':';
+                sequence.push_back(static_cast<Type>(ratio));
+                cout << sequence.back() << endl;
+                if(float_equal_zero(ratio - sequence.back())){
+                    break;
+                }
+                ratio = 1.0 / (ratio - sequence.back());
+                p2 = sequence.back() * p1 + p0;
+                q2 = sequence.back() * q1 + q0;
+                err = p2 / q2 - p1 / q1;
+                p0 = p1;q0 = q1;
+                p1 = p2;q1 = q2;
             }
-            for(auto &itr : seq){
+            for(auto &itr:sequence){
                 cout << itr << ',';
             }
             cout << endl;
-            m_num = seq.back();
-            m_den = 1;
-            auto nice = *this;
-            for(auto itr = seq.rbegin() + 1;itr != seq.rend();++itr){
-                *this = frac_base<Type>(*itr,1) + reciprocal();
-                if(abs(static_cast<double>(nice) - r) > abs(static_cast<double>(*this) - r)){
-                    nice = *this;
-                }
+            *this = frac_base<Type>(sequence.back(),1);
+            for(auto itr = sequence.rbegin() + 1;itr != sequence.rend(); ++itr){
+                *this = frac_base<Type>(*itr,1) + this->reciprocal();
             }
-            *this = nice;
         }
         ~frac_base() noexcept = default;
         
