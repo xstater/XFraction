@@ -23,11 +23,14 @@ namespace fraction{
             m_auto_reduce();     
         }
         frac_base(double ratio){
+            double r = ratio;
             std::vector<Type> seq;
             seq.push_back(static_cast<Type>(ratio));
             ratio -= static_cast<double>(seq.back());
+            unsigned int count = 0;
             while(!float_equal_zero(ratio)){
-                cout << ratio << endl;
+                if(++count > 10000) break;
+                //cout << ratio << endl;
                 ratio = 1.0 / ratio;
                 seq.push_back(static_cast<Type>(ratio));
                 ratio -= static_cast<double>(seq.back());
@@ -38,9 +41,14 @@ namespace fraction{
             cout << endl;
             m_num = seq.back();
             m_den = 1;
+            auto nice = *this;
             for(auto itr = seq.rbegin() + 1;itr != seq.rend();++itr){
                 *this = frac_base<Type>(*itr,1) + reciprocal();
+                if(abs(static_cast<double>(nice) - r) > abs(static_cast<double>(*this) - r)){
+                    nice = *this;
+                }
             }
+            *this = nice;
         }
         ~frac_base() noexcept = default;
         

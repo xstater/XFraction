@@ -15,6 +15,8 @@ int main(){
     cout << (frac(1,3) < 2) << endl;
     cout << (frac(1,3) + frac(2,3)).is_integer() << endl;
     cout << frac(3.245) << endl; //3.245 == 649/200
-    cout << frac(3.1415926535897) << endl; //3.245 == 649/200
+    auto f = frac(3.1415926535897);
+    cout << f << endl;
+    cout << static_cast<double>(f) << endl;
     return 0;
 }
