@@ -1,4 +1,4 @@
-cmake_minimual_require(VERSION 2.9)
+cmake_minimum_required(VERSION 3.0)
 
 include_directories(.)
 
