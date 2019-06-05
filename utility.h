@@ -3,6 +3,9 @@
 
 #include <utility>
 
+#include <iostream>
+using namespace std;
+
 namespace fraction{
     template <class Type>
     constexpr int sign(const Type &value){
@@ -15,7 +18,7 @@ namespace fraction{
     
     template <class Type>
     constexpr Type gcd(const Type &a,const Type &b){
-        return a == 0 ? b : gcd(b,a % b);
+        return b == 0 ? a : gcd(b,a % b);
     }
     
     template <class Type>
