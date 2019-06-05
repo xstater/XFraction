@@ -3,11 +3,14 @@
 
 #include <utility>
 #include <iostream>
+#include <vector>
 #include "utility.h"
 
 #if !defined(XFRACTION_AUTO_REDUCE)
 #define XFRACTION_AUTO_REDUCE 1
 #endif
+
+using namespace std;
 
 namespace fraction{
     template <class Type>
@@ -19,8 +22,25 @@ namespace fraction{
              m_den(abs(den)){
             m_auto_reduce();     
         }
-        constexpr frac_base(double ratio){
-            
+        frac_base(double ratio){
+            std::vector<Type> seq;
+            seq.push_back(static_cast<Type>(ratio));
+            ratio -= static_cast<double>(seq.back());
+            while(!float_equal_zero(ratio)){
+                cout << ratio << endl;
+                ratio = 1.0 / ratio;
+                seq.push_back(static_cast<Type>(ratio));
+                ratio -= static_cast<double>(seq.back());
+            }
+            for(auto &itr : seq){
+                cout << itr << ',';
+            }
+            cout << endl;
+            m_num = seq.back();
+            m_den = 1;
+            for(auto itr = seq.rbegin() + 1;itr != seq.rend();++itr){
+                *this = frac_base<Type>(*itr,1) + reciprocal();
+            }
         }
         ~frac_base() noexcept = default;
         
