@@ -31,9 +31,7 @@ namespace fraction{
                        p2,q2,
                        err    = ratio - p1;
                 !float_equal_zero(err);){
-                cout << ratio << ':';
                 sequence.push_back(static_cast<Type>(ratio));
-                cout << sequence.back() << endl;
                 if(float_equal_zero(ratio - sequence.back())){
                     break;
                 }
@@ -44,10 +42,6 @@ namespace fraction{
                 p0 = p1;q0 = q1;
                 p1 = p2;q1 = q2;
             }
-            for(auto &itr:sequence){
-                cout << itr << ',';
-            }
-            cout << endl;
             *this = frac_base<Type>(sequence.back(),1);
             for(auto itr = sequence.rbegin() + 1;itr != sequence.rend(); ++itr){
                 *this = frac_base<Type>(*itr,1) + this->reciprocal();
@@ -56,7 +50,7 @@ namespace fraction{
         ~frac_base() noexcept = default;
         
         frac_base<Type> &operator=(double ratio){
-            
+            return (*this = frac_base<Type>(ratio));
         }
         
         Type &num()noexcept{
@@ -96,29 +90,62 @@ namespace fraction{
             return (*this *= rhs.reciprocal());
         }
         
+        template<class RType>
+        frac_base<Type> &operator+=(const RType &rhs)noexcept{
+            return *this += frac_base<Type>(rhs);
+        }
+        template<class RType>
+        frac_base<Type> &operator-=(const RType &rhs)noexcept{
+            return *this -= frac_base<Type>(rhs);
+        }
+        template<class RType>
+        frac_base<Type> &operator*=(const RType &rhs)noexcept{
+            return *this *= frac_base<Type>(rhs);
+        }
+        template<class RType>
+        frac_base<Type> &operator/=(const RType &rhs)noexcept{
+            return *this /= frac_base<Type>(rhs);
+        }
         
-        frac_base<Type> operator+(const frac_base<Type> &rhs){
+        frac_base<Type> operator+(const frac_base<Type> &rhs)const noexcept{
             auto tmp = *this;
             tmp += rhs;
             return tmp;
         }
-        frac_base<Type> operator-(const frac_base<Type> &rhs){
+        frac_base<Type> operator-(const frac_base<Type> &rhs)const noexcept{
             auto tmp = *this;
             tmp -= rhs;
             return tmp;
         }
-        frac_base<Type> operator*(const frac_base<Type> &rhs){
+        frac_base<Type> operator*(const frac_base<Type> &rhs)const noexcept{
             auto tmp = *this;
             tmp *= rhs;
             return tmp;
         }
-        frac_base<Type> operator/(const frac_base<Type> &rhs){
+        frac_base<Type> operator/(const frac_base<Type> &rhs)const noexcept{
             auto tmp = *this;
             tmp /= rhs;
             return tmp;
         }
-        frac_base<Type> operator-(){
+        frac_base<Type> operator-()const noexcept{
             return frac_base<Type>(-m_num,m_den);
+        }
+        
+        template<class RType>
+        frac_base<Type> operator+(const RType &rhs)const noexcept{
+            return (*this + frac_base<Type>(rhs));
+        }
+        template<class RType>
+        frac_base<Type> operator-(const RType &rhs)const noexcept{
+            return (*this - frac_base<Type>(rhs));
+        }
+        template<class RType>
+        frac_base<Type> operator*(const RType &rhs)const noexcept{
+            return (*this * frac_base<Type>(rhs));
+        }
+        template<class RType>
+        frac_base<Type> operator/(const RType &rhs)const noexcept{
+            return (*this / frac_base<Type>(rhs));
         }
         
         frac_base<Type> reciprocal()const noexcept{
@@ -174,8 +201,28 @@ namespace fraction{
         }
         
         template <class RType>
-        bool operator<(RType &&rhs)const noexcept{
-            return static_cast<double>(*this) < static_cast<double>(rhs);
+        bool operator<(const RType &rhs)const noexcept{
+            return *this < frac_base<Type>(rhs);
+        }
+        template <class RType>
+        bool operator<=(const RType &rhs)const noexcept{
+            return *this <= frac_base<Type>(rhs);
+        }
+        template <class RType>
+        bool operator>(const RType &rhs)const noexcept{
+            return *this > frac_base<Type>(rhs);
+        }
+        template <class RType>
+        bool operator>=(const RType &rhs)const noexcept{
+            return *this >= frac_base<Type>(rhs);
+        }
+        template <class RType>
+        bool operator==(const RType &rhs)const noexcept{
+            return *this == frac_base<Type>(rhs);
+        }
+        template <class RType>
+        bool operator!=(const RType &rhs)const noexcept{
+            return *this != frac_base<Type>(rhs);
         }
         
         operator double()const noexcept{
