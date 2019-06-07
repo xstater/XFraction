@@ -50,7 +50,8 @@ namespace fraction{
         ~frac_base() noexcept = default;
         
         frac_base<Type> &operator=(double ratio){
-            return (*this = frac_base<Type>(ratio));
+            *this = frac_base<Type>(ratio);
+            return *this;
         }
         
         Type &num()noexcept{
@@ -66,28 +67,29 @@ namespace fraction{
             return m_den;
         }
            
-        frac_base<Type> &operator+=(const frac_base<Type> &rhs){
+        frac_base<Type> &operator+=(const frac_base<Type> &rhs)noexcept{
             Type l = lcm(m_den,rhs.m_den);
             m_num = m_num * l / m_den + rhs.m_num * l / rhs.m_den;
             m_den = l;
             m_auto_reduce();
             return *this;
         }
-        frac_base<Type> &operator-=(const frac_base<Type> &rhs){
+        frac_base<Type> &operator-=(const frac_base<Type> &rhs)noexcept{
             Type l = lcm(m_den,rhs.m_den);
             m_num = m_num * l / m_den - rhs.m_num * l / rhs.m_den;
             m_den = l;
             m_auto_reduce();
             return *this;
         }
-        frac_base<Type> &operator*=(const frac_base<Type> &rhs){
+        frac_base<Type> &operator*=(const frac_base<Type> &rhs)noexcept{
             m_num *= rhs.m_num;
             m_den *= rhs.m_den;
             m_auto_reduce();
             return *this;
         }
-        frac_base<Type> &operator/=(const frac_base<Type> &rhs){
-            return (*this *= rhs.reciprocal());
+        frac_base<Type> &operator/=(const frac_base<Type> &rhs)noexcept{
+            *this *= rhs.reciprocal();
+            return *this;
         }
         
         template<class RType>

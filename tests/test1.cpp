@@ -26,5 +26,8 @@ int main(){
     cout << (1.3 * frac(1,3)) << endl;
     cout << (frac(1,3) * 1.3) << endl;
     cout << frac(1.3 * frac(1,3)) << endl;
+    cout << frac(-1.33) << endl;
+    cout << frac(-1.732) << endl;
+    cout << frac(-1.33) + frac(-1.732) << endl;
     return 0;
 }
