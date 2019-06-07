@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include "utility.h"
 #include "frac_base.h"
 
 using namespace std;

@@ -4,15 +4,39 @@
 #include <utility>
 #include <iostream>
 #include <vector>
-#include "utility.h"
 
 #if !defined(XFRACTION_AUTO_REDUCE)
 #define XFRACTION_AUTO_REDUCE 1
 #endif
 
-using namespace std;
+#define XFRACTION_EPS 1e-8
 
 namespace fraction{
+    template <class Type>
+    constexpr int sign(const Type &value)noexcept{
+        return value < 0 ? -1 : 1;
+    }
+    template <class Type>
+    constexpr Type abs(const Type &value)noexcept{
+        return value < 0 ? -value : value;
+    }
+    
+    template <class Type>
+    constexpr Type gcd(const Type &a,const Type &b)noexcept{
+        return b == 0 ? a : gcd(b,a % b);
+    }
+    
+    template <class Type>
+    constexpr Type lcm(const Type &a,const Type &b)noexcept{
+        return a * b / gcd(a,b);
+    }
+
+    bool float_equal_zero(double data)noexcept{
+        return abs(data) < XFRACTION_EPS;
+    }
+
+#undef XFRACTION_EPS
+
     template <class Type>
     class frac_base{
     public:
