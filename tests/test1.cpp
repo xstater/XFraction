@@ -28,5 +28,6 @@ int main(){
     cout << frac(-1.33) << endl;
     cout << frac(-1.732) << endl;
     cout << frac(-1.33) + frac(-1.732) << endl;
+    cout << "Hello world!" << endl;
     return 0;
 }
